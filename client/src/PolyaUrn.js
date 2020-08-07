@@ -15,25 +15,45 @@ export default function PolyaUrn(props) {
   const defaultProps = {
   bgcolor: 'background.paper',
   m: 1,
-  style: { maxWidth: '15rem', height: '18rem' },
+  style: { maxWidth: '15rem', height: '18rem', position:'relative' },
   borderColor: 'text.primary',
 };
 
-  const ballProps ={
-  position:'absolute',
-  bottom:0
+const baryProps = {
+  bgcolor: 'background.paper',
+  m: 1,
+  style: { maxWidth: 200, height: 200, position:'relative' },
+  borderColor: 'text.primary',
+};
 
-  }
+const redBallProps={
+	position:'absolute',
+	bottom:'0',
+	left:'0'
+
+}
+  
   const stringToColor = {"green": green[500],"red":red[500],"blue":blue[500],"blank":'white'}
   const numBalls=props.numBalls
   const blankBalls=Math.max(props.maxBalls-numBalls,0)
+  const redTop=0
+  const redLeft=0
+  const blueTop=0
+  const blueLeft=175
+  const greenTop=175
+  const greenLeft=90
+  const baryCoords={'red':{'top':redTop,'left':redLeft,'wt':props.baryColors['red']/numBalls},
+  					'blue':{'top':blueTop,'left':blueLeft,'wt':props.baryColors['blue']/numBalls},
+  					'green':{'top':greenTop,'left':greenLeft,'wt':props.baryColors['green']/numBalls}}
+
+  const baryX=Object.keys(props.baryColors).map((color)=>baryCoords[color]['left']*baryCoords[color]['wt'])
+  						  .reduce((a,b)=>a+b,0)
+  const baryY=Object.keys(props.baryColors).map((color)=>baryCoords[color]['top']*baryCoords[color]['wt'])
+  						  .reduce((a,b)=>a+b,0)
   
-  
- 
-  
- 
+
   return (
-  	<div>
+  	<div >
   	<Box bottom={0} borderBottom={1} borderLeft={1} borderRight={1} 
   	 {...defaultProps}>
   		{[...['blank'],...Object.keys(props.colors)].map((color,index)=> {
@@ -41,7 +61,7 @@ export default function PolyaUrn(props) {
   			
   			return (
   				[...Array(numBalls)].map((e,i)=>
-  					<Ball {...ballProps} key ={color+i} style={{color: stringToColor[color]}} /> )
+  					<Ball  key ={color+i} style={{color: stringToColor[color]}} /> )
   				
   				)
 
@@ -56,6 +76,16 @@ export default function PolyaUrn(props) {
   			value={props.epochs>0? props.epochs:""}
   			onChange={props.setEpochs}
   		/>
+
+
+  	<Box border={1} {...baryProps} >
+  		
+  		<Ball style={{top:redTop, left:redLeft, color: red[500],position:'absolute'}}/>
+  		<Ball style={{top:blueTop, left:blueLeft, color: blue[500], position:'absolute'}}/>
+  		<Ball style={{top:greenTop, left:greenLeft, color:green[500], position:'absolute'}}/>
+  		<Ball style={{top:baryY,left:baryX, position:'absolute'}} />
+
+  	</Box>
   	</div>
   	)
     

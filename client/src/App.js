@@ -98,7 +98,7 @@ class App extends React.Component {
         {"Polya Urn Demo"}
       </Typography>
       <PolyaUrn 
-
+        baryColors={this.state.colors}
         colors={colorsRegularized} 
         onClick={this.addBalls}
         epochs={this.state.epochs}
@@ -121,6 +121,11 @@ class App extends React.Component {
           )
         })}
       </Box>
+
+
+
+
+
       </div>
       )
   }
