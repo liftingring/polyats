@@ -8,6 +8,9 @@ import {randomColor} from './MonteCarloUtils'
 import Typography from '@material-ui/core/Typography'
 
 
+import config from './config';
+import io from 'socket.io-client';
+
 
 class App extends React.Component {
   constructor(props){
@@ -15,8 +18,19 @@ class App extends React.Component {
     this.addBall=this.addBall.bind(this);
     this.addBalls=this.addBalls.bind(this);
     this.handleInputs=this.handleInputs.bind(this);
+    this.saveColors=this.saveColors.bind(this);
     this.setEpochs=this.setEpochs.bind(this);
-    this.state={colors:{'red':1,'blue':1,'green':1},colorsRegularized:{},epochs:1}
+    this.state={colors:{'red':1,'blue':1,'green':1},colorsRegularized:{},epochs:1,history:[]}
+  }
+
+  componentDidMount(){
+
+    const PORT=config[process.env.NODE_ENV].endpoint
+    this.socket = io(PORT);
+
+    this.socket.on('init', (colorStates)=>{
+    this.setState({history:colorStates})
+    })
   }
 
   addBall() {
@@ -35,6 +49,13 @@ class App extends React.Component {
       this.addBall()
       i=i+1
     }
+  }
+
+  saveColors(event){
+    this.socket.emit('colors',this.state.colors)
+    this.setState({colors:{'red':1,'blue':1,'green':1},history:[...this.state.history,{colors:this.state.colors}]})
+
+
   }
 
   handleInputs(event,color){
@@ -66,6 +87,7 @@ class App extends React.Component {
 
 
   render(){
+    console.log(this.state)
     const maxBalls=100
     const minResolution=0.33
     const colorsRegularized={}
@@ -105,6 +127,8 @@ class App extends React.Component {
         setEpochs={(event)=>this.setEpochs(event)}
         numBalls={totalBalls}
         maxBalls={maxBalls}
+        history={this.state.history}
+        onSave={(event)=> this.saveColors(event)}
       />
       <Box width='20rem' border={1}>
       <Typography>
