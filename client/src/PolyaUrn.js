@@ -1,9 +1,10 @@
 import React from 'react';
 import {default as Ball} from '@material-ui/icons/FiberManualRecord';
-import { green,red,blue,grey } from '@material-ui/core/colors';
+import { green,red,blue,grey,orange } from '@material-ui/core/colors';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button' 
 import InputBase from '@material-ui/core/InputBase';
+import Tooltip from '@material-ui/core/Tooltip'
 
 
 
@@ -24,7 +25,8 @@ function baryCoords(colorsStr,config){
   const baryCoords={'red':{'top':redTop,'left':redLeft,'wt':colors['red']/numBalls},
             'blue':{'top':blueTop,'left':blueLeft,'wt':colors['blue']/numBalls},
             'green':{'top':greenTop,'left':greenLeft,'wt':colors['green']/numBalls}}
-
+  console.log(baryCoords['red'])
+  console.log(keys)
   const baryX=keys.map((color)=>baryCoords[color]['left']*baryCoords[color]['wt'])
                 .reduce((a,b)=>a+b,0)
   const baryY=keys.map((color)=>baryCoords[color]['top']*baryCoords[color]['wt'])
@@ -81,7 +83,7 @@ const redBallProps={
   		})}
     
   	</Box>
-  		<Button variant='contained' color='primary' onClick={props.onClick}>
+  		<Button style={{margin:15}} variant='contained' color='primary' onClick={props.onClick}>
   			Add Balls >>
   		</Button>
   		<InputBase
@@ -91,23 +93,29 @@ const redBallProps={
   		/>
 
 
-  	<Box border={1} {...baryProps} >
+  	<Box   border={1} {...baryProps} >
   		
   		<Ball style={{top:config.redTop, left:config.redLeft, color: red[500],position:'absolute'}}/>
   		<Ball style={{top:config.blueTop, left:config.blueLeft, color: blue[500], position:'absolute'}}/>
   		<Ball style={{top:config.greenTop, left:config.greenLeft, color:green[500], position:'absolute'}}/>
   		<Ball style={{top:baryY,left:baryX, position:'absolute'}} />
 
-      {props.history.map((hist)=>{
+      {props.history.map((hist,index)=>{
         const colors=hist.colors
+        console.log(colors)
         const barys=baryCoords(colors,config)
         const baryX=barys.baryX
         const baryY=barys.baryY
-        return <Ball style={{top:baryY, left:baryX, size:10, color: grey[500],position:'absolute'}}/>
+        const ballColor=hist.createdAt==="Now"?orange[400]: grey[500]
+        
+        return(
+        <Tooltip key={index} title={JSON.stringify([colors,{created:hist.createdAt}])}>
+           <Ball key={index} style={{top:baryY, left:baryX, width:15, height:15, color: ballColor,position:'absolute'}}/>
+        </Tooltip>)
       })}
 
   	</Box>
-    <Button variant='contained' color='primary' onClick={props.onSave}>
+    <Button  variant='contained' color='primary' onClick={props.onSave}>
       Save
     </Button>
   	</div>

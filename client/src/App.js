@@ -53,7 +53,7 @@ class App extends React.Component {
 
   saveColors(event){
     this.socket.emit('colors',this.state.colors)
-    this.setState({colors:{'red':1,'blue':1,'green':1},history:[...this.state.history,{colors:this.state.colors}]})
+    this.setState({colors:{'red':1,'blue':1,'green':1},history:[...this.state.history,{colors:this.state.colors,createdAt:"Now"}]})
 
 
   }
@@ -119,6 +119,9 @@ class App extends React.Component {
       <Typography align='center' variant="h3" component ="h2" gutterBottom>
         {"Polya Urn Demo"}
       </Typography>
+      <Typography align='center' variant='h7'>
+        {"Release 2020/08/09 --- Disclaimer: tooltip can be fuzzy in Chrome"}
+      </Typography>
       <PolyaUrn 
         baryColors={this.state.colors}
         colors={colorsRegularized} 
@@ -130,7 +133,7 @@ class App extends React.Component {
         history={this.state.history}
         onSave={(event)=> this.saveColors(event)}
       />
-      <Box width='20rem' border={1}>
+      <Box  style={{margin:30}} width='20rem' border={1}>
       <Typography>
         {"Current State"}
       </Typography>
