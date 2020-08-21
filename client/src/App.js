@@ -6,6 +6,7 @@ import BallInput from './BallInput';
 import Box from '@material-ui/core/Box';
 import {randomColor} from './MonteCarloUtils'
 import Typography from '@material-ui/core/Typography'
+import Link from '@material-ui/core/Link';
 
 
 import config from './config';
@@ -120,7 +121,12 @@ class App extends React.Component {
         {"Polya Urn Demo"}
       </Typography>
       <Typography align='center' variant='h7'>
-        {"Release 2020/08/09 --- Disclaimer: tooltip can be fuzzy in Chrome"}
+        {"This demonstrates the Polya Urn stochastic process where a ball is drawn and 2 of the same color are added back"}
+      </Typography>
+      <Typography>
+        <Link href="https://en.wikipedia.org/wiki/P%C3%B3lya_urn_model" onClick={(e) =>e.preventDefault}>
+        More Info
+        </Link>
       </Typography>
       <PolyaUrn 
         baryColors={this.state.colors}
