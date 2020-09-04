@@ -28,6 +28,7 @@ class App extends React.Component {
 
     const PORT=config[process.env.NODE_ENV].endpoint
     this.socket = io(PORT);
+    console.log(PORT)
 
     this.socket.on('init', (colorStates)=>{
     this.setState({history:colorStates})
